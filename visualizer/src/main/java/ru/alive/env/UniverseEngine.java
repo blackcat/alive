@@ -1,52 +1,35 @@
 package ru.alive.env;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.alive.util.AbstractThread;
+
 /**
  * @author pvyazankin
  * @since 08.11.12 10:03
  */
-public class UniverseEngine extends Thread {
+public class UniverseEngine extends AbstractThread {
 
-    protected static final UniverseEngine SINGLETON = new UniverseEngine("Universe Engine");
+    private static final Logger log = LoggerFactory.getLogger(UniverseEngine.class);
 
+    private static UniverseEngine SINGLETON;
 
-
-    protected static UniverseEngine getInstance() {
-        return SINGLETON;
+    public static UniverseEngine getInstance() {
+        return (UniverseEngine) SINGLETON;
     }
 
-    private UniverseEngine() {
-    }
-
-    private UniverseEngine(Runnable target) {
-        super(target);
-    }
-
-    private UniverseEngine(ThreadGroup group, Runnable target) {
-        super(group, target);
+    static  {
+        SINGLETON = new UniverseEngine("Universe Engine");
     }
 
     private UniverseEngine(String name) {
         super(name);
     }
 
-    private UniverseEngine(ThreadGroup group, String name) {
-        super(group, name);
-    }
-
-    private UniverseEngine(Runnable target, String name) {
-        super(target, name);
-    }
-
-    private UniverseEngine(ThreadGroup group, Runnable target, String name) {
-        super(group, target, name);
-    }
-
-    private UniverseEngine(ThreadGroup group, Runnable target, String name, long stackSize) {
-        super(group, target, name, stackSize);
-    }
-
     @Override
-    public void run() {
-        throw new RuntimeException("not implemented yet");
+    public synchronized void iteration() throws InterruptedException{
+        sleep(5*1000);
+        log.info("Universe iteration");
+        notifyAll();
     }
 }
