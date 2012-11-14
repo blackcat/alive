@@ -12,13 +12,15 @@ public class Creature extends AbstractThread {
 
     private static final Logger log = LoggerFactory.getLogger(Environment.class);
     public static final int SIZE = 2;
+    private static int counter = 0;
+
     private Impact impactOfEnv = new Impact();
     private Impact impactToEnv = new Impact();
 
     private UniverseEngine engine;
 
     public Creature(UniverseEngine engine) {
-        super("Simple creature");
+        super("Simple creature #" + ++counter);
         this.engine = engine;
     }
 
@@ -26,6 +28,8 @@ public class Creature extends AbstractThread {
     public void iteration() throws InterruptedException {
         sleep(UniverseEngine.TICK);
         log.debug("Creature acts");
+
+
     }
 
     public Impact getImpactOfEnv() {
