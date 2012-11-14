@@ -36,10 +36,12 @@ public class Environment extends AbstractThread {
 
     @Override
     public void iteration() throws InterruptedException {
+        sleep(UniverseEngine.TICK);
         // nothing to do by now
-        synchronized (engine) {
-            wait(); // waiting for notification from engine
-        }
+//        synchronized (this) {
+            log.debug("Environment iteration");
+//            wait(); // waiting for notification from engine
+//        }
     }
 
     public float getWorthModifier(int x, int y) {
@@ -70,6 +72,9 @@ public class Environment extends AbstractThread {
     }
 
     public void clearCreatures() {
+        for (Creature creature : creatures.keySet()) {
+            creature.interrupt();
+        }
         creatures.clear();
     }
 
@@ -82,10 +87,10 @@ public class Environment extends AbstractThread {
 
     public void addSomeRandomCreatures() {
         Creature[] creatures = new Creature[]{
-                new Creature(),
-                new Creature(),
-                new Creature(),
-                new Creature()
+                new Creature(engine),
+                new Creature(engine),
+                new Creature(engine),
+                new Creature(engine)
         };
         this.addCreatures(Arrays.asList(creatures));
     }

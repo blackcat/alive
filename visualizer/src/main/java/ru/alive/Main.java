@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 //        UniverseEngine universeEngine = UniverseEngine.getInstance();
 //
 //        Environment environment = Environment.getInstance();
@@ -26,5 +26,8 @@ public class Main {
 //        Window window = new Window(visualisation);
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+
+        UniverseEngine universeEngine = context.getBean(UniverseEngine.class);
+        universeEngine.start();
     }
 }
