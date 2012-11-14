@@ -14,8 +14,8 @@ public abstract class AbstractThread extends Thread {
 
     protected AbstractThread SINGLETON;
 
-    private boolean suspended;
-    private boolean stopped;
+    private boolean suspended = false;
+    private boolean stopped = false;
 
 
     private AbstractThread() {
@@ -53,7 +53,7 @@ public abstract class AbstractThread extends Thread {
     public final void run() {
         try {
             synchronized (this) {
-                while (!suspended) {
+                while (!stopped) {
                     iteration();
                 }
             }
@@ -73,11 +73,11 @@ public abstract class AbstractThread extends Thread {
         return stopped;
     }
 
-    public synchronized void setSuspended(boolean suspended) {
+    public synchronized void suspend(boolean suspended) {
         this.suspended = suspended;
     }
 
-    public synchronized void setStopped(boolean stopped) {
+    public synchronized void stop(boolean stopped) {
         this.stopped = stopped;
     }
 }

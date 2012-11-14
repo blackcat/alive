@@ -21,10 +21,11 @@ public class Environment extends AbstractThread {
     @Autowired
     private UniverseEngine engine;
 
-    private static final int USIZE = 300;
-    private Dimension size = new Dimension(USIZE, USIZE);
+    private int usize = 300;
+    private Dimension size = new Dimension(usize, usize);
+    private int resistanceLimit = 5;
     private Map<Creature, Dimension> creatures = new HashMap<Creature, Dimension>();
-    private Random random = new Random(USIZE - Creature.SIZE);
+    private final Random random = new Random(usize - Creature.SIZE);
 
     protected Environment() {
         super("2D environment");
@@ -37,16 +38,31 @@ public class Environment extends AbstractThread {
     @Override
     public void iteration() throws InterruptedException {
         sleep(UniverseEngine.TICK);
-        // nothing to do by now
-//        synchronized (this) {
-            log.debug("Environment iteration");
-//            wait(); // waiting for notification from engine
-//        }
+        log.trace("Environment iteration");
+
+        int movx, movy;
+        for (Map.Entry<Creature, Dimension> entry : creatures.entrySet()) {
+            movx = entry.getKey().getImpactToEnv().movementEffortX;
+            movy = entry.getKey().getImpactToEnv().movementEffortY;
+            // read impacts from creatures
+            entry.getValue().setSize(
+                    Math.abs(movx) > resistanceLimit && entry.getValue().getWidth() + movx >= 0 && entry.getValue().getWidth() + movx < usize ? resistanceLimit : movx,
+                    Math.abs(movy) > resistanceLimit && entry.getValue().getHeight() + movy >= 0 && entry.getValue().getHeight() + movy < usize ? resistanceLimit : movy
+            );
+
+            // write impacts to creatures
+            entry.getKey().getImpactOfEnv().worthModifier = getWorthModifier(entry.getValue());
+        }
+        log.debug("Environment iteration finished");
+    }
+
+    public float getWorthModifier(Dimension d) {
+        float m = (float) ((d.getWidth() + d.getHeight()) / (size.getWidth() + size.getHeight()));
+        return m > 1 ? 1 : m;
     }
 
     public float getWorthModifier(int x, int y) {
-        float m = (float) ((x + y) / (size.getWidth() + size.getHeight()));
-        return m > 1 ? 1 : m;
+        return getWorthModifier(new Dimension(x, y));
     }
 
     public Dimension getSize() {
@@ -54,10 +70,12 @@ public class Environment extends AbstractThread {
     }
 
     public void addCreature(Creature creature) {
-        creatures.put(creature, new Dimension(
+        Dimension d = new Dimension(
                 random.nextInt(size.width),
                 random.nextInt(size.height)
-        ));
+        );
+        creatures.put(creature, d);
+        creature.getImpactOfEnv().worthModifier = getWorthModifier(d);
     }
 
     public boolean addCreatures(Collection<Creature> creatures) {
@@ -68,12 +86,13 @@ public class Environment extends AbstractThread {
     }
 
     public boolean removeCreature(Creature creature) {
+        creature.stop(true);
         return creatures.remove(creature) != null;
     }
 
     public void clearCreatures() {
         for (Creature creature : creatures.keySet()) {
-            creature.interrupt();
+            creature.stop(true);
         }
         creatures.clear();
     }
