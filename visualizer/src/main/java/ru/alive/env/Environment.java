@@ -24,10 +24,14 @@ public class Environment extends AbstractThread {
     private static final int USIZE = 300;
     private Dimension size = new Dimension(USIZE, USIZE);
     private Map<Creature, Dimension> creatures = new HashMap<Creature, Dimension>();
-    private Random random = new Random(USIZE);
+    private Random random = new Random(USIZE - Creature.SIZE);
 
     protected Environment() {
         super("2D environment");
+    }
+
+    public void init() {
+        addSomeRandomCreatures();
     }
 
     @Override
@@ -84,5 +88,9 @@ public class Environment extends AbstractThread {
                 new Creature()
         };
         this.addCreatures(Arrays.asList(creatures));
+    }
+
+    public Dimension getCreaturePosition(Creature c) {
+        return creatures.get(c);
     }
 }

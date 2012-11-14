@@ -5,7 +5,9 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+
+    default-init-method="init">
 
 
     <context:component-scan base-package="ru.alive"/>
@@ -14,6 +16,7 @@
 
     <bean id="controlPanel" class="ru.alive.env.visual.ControlPanel">
         <constructor-arg ref="environment"/>
+        <constructor-arg ref="environmentVisualisation"/>
     </bean>
 
     <bean id="window" class="ru.alive.env.visual.Window">

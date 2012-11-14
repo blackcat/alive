@@ -18,6 +18,7 @@ import java.util.Random;
 public class ControlPanel extends JPanel {
 
     private final Environment env;
+    private final EnvironmentVisualisation environmentVisualisation;
 
     private LayoutManager layoutManager = new VerticalBagLayout();
     private Button recreateCreaturesButton = new Button("Recreate creatures");
@@ -26,14 +27,18 @@ public class ControlPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             env.clearCreatures();
             env.addSomeRandomCreatures();
+            environmentVisualisation.repaint();
         }
     };
 
-    public ControlPanel(Environment environment) {
+    public ControlPanel(Environment environment, EnvironmentVisualisation environmentVisualisation) {
         env = environment;
+        this.environmentVisualisation = environmentVisualisation;
 
         this.setLayout(layoutManager);
-        setMaximumSize(new Dimension(100, 300));
+        setMinimumSize(new Dimension(100, 300));
+
+        setBorder(BorderFactory.createLineBorder(Color.black));
 
         recreateCreaturesButton.addActionListener(recreateCreaturesListener);
 

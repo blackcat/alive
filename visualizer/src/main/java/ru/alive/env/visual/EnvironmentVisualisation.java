@@ -32,6 +32,11 @@ public class EnvironmentVisualisation extends JPanel {
     public EnvironmentVisualisation(Environment environment, CreatureVisualisationHolder holder) {
         env = environment;
         setSize(env.getSize());
+        setMinimumSize(env.getSize());
+        setMaximumSize(env.getSize());
+        setPreferredSize(env.getSize());
+        setOpaque(true);
+        setBorder(BorderFactory.createLineBorder(Color.black));
         creatureVisualisationHolder = holder;
     }
 
@@ -58,7 +63,7 @@ public class EnvironmentVisualisation extends JPanel {
 
     protected void paintCreatures(Graphics2D g2d) {
         for (Creature c : env.getCreatures()) {
-            creatureVisualisationHolder.getCreatureVisualisation(c).paintMyself(g2d, new Dimension());
+            creatureVisualisationHolder.getCreatureVisualisation(c).paintMyself(g2d, env.getCreaturePosition(c));
         }
     }
 

@@ -15,13 +15,14 @@ public class Window extends JFrame {
     public Window(EnvironmentVisualisation visualisation, ControlPanel controlPanel) throws HeadlessException {
         super("Universe visualisation");
 
-        setLayout(new BorderLayout());
+        BorderLayout layout = new BorderLayout();
+        setLayout(layout);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        add(visualisation);
-        add(controlPanel);
+        add(visualisation, BorderLayout.WEST);
+        add(controlPanel, BorderLayout.EAST);
         setSize(500, visualisation.getHeight());
         setResizable(false);
 
