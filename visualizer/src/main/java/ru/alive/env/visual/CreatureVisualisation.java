@@ -10,12 +10,7 @@ import java.awt.*;
  */
 public class CreatureVisualisation {
 
-    private EnvironmentVisualisation envVis;
-    private Creature creature;
-
-    public CreatureVisualisation(EnvironmentVisualisation environmentVisualisation, Creature creature) {
-        envVis = environmentVisualisation;
-        this.creature = creature;
+    public CreatureVisualisation() {
     }
 
     public void paintMyself(Graphics2D g2d, Dimension d) {

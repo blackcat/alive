@@ -14,25 +14,12 @@ public class Creature extends AbstractThread {
 
     private static final Logger log = LoggerFactory.getLogger(Environment.class);
 
-    private static final UniverseEngine ENGINE = UniverseEngine.getInstance();
-    private static Creature SINGLETON;
-
-    protected Creature(String name) {
-        super(name);
-    }
-
-    static {
-        SINGLETON = new Creature("Simples creature");
+    public Creature() {
+        super("Simples creature");
     }
 
     @Override
     public void iteration() throws InterruptedException {
         log.debug("act!");
     }
-
-    public static Creature getInstance() {
-        return (Creature) SINGLETON;
-    }
-
-
 }

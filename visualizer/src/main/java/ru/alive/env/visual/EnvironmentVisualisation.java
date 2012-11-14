@@ -2,6 +2,9 @@ package ru.alive.env.visual;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.alive.env.Creature;
 import ru.alive.env.Environment;
 
 import javax.swing.*;
@@ -20,11 +23,16 @@ public class EnvironmentVisualisation extends JPanel {
     private static final Logger log = LoggerFactory.getLogger(EnvironmentVisualisation.class);
 
     private Environment env;
+    @Autowired
+    private CreatureVisualisationHolder creatureVisualisationHolder = new CreatureVisualisationHolder();
+
     private Collection<CreatureVisualisation> creatureVisualisations = new HashSet<CreatureVisualisation>();
 
-    public EnvironmentVisualisation(Environment environment) {
+
+    public EnvironmentVisualisation(Environment environment, CreatureVisualisationHolder holder) {
         env = environment;
         setSize(env.getSize());
+        creatureVisualisationHolder = holder;
     }
 
     @Override
@@ -43,12 +51,16 @@ public class EnvironmentVisualisation extends JPanel {
             g2d.drawArc(0 - k, 0 - k, 2 * k, 2 * k, 0, -180);
         }
 
+        paintCreatures(g2d);
+
         setBackground(Color.white);
     }
 
     protected void paintCreatures(Graphics2D g2d) {
-        for (CreatureVisualisation cv : creatureVisualisations) {
-            cv.paintMyself(g2d, new Dimension());
+        for (Creature c : env.getCreatures()) {
+            creatureVisualisationHolder.getCreatureVisualisation(c).paintMyself(g2d, new Dimension());
         }
     }
+
+//    public vo
 }

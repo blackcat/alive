@@ -1,5 +1,6 @@
 package ru.alive;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.alive.env.Creature;
 import ru.alive.env.Environment;
 import ru.alive.env.UniverseEngine;
@@ -15,18 +16,15 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-        UniverseEngine universeEngine = UniverseEngine.getInstance();
+//        UniverseEngine universeEngine = UniverseEngine.getInstance();
+//
+//        Environment environment = Environment.getInstance();
+//        environment.addSomeRandomCreatures();
+//
+//
+//        EnvironmentVisualisation visualisation = new EnvironmentVisualisation(environment);
+//        Window window = new Window(visualisation);
 
-        Environment environment = Environment.getInstance();
-        Creature[] creatures = new Creature[]{
-                Creature.getInstance(),
-                Creature.getInstance(),
-                Creature.getInstance(),
-                Creature.getInstance()
-        };
-        environment.addCreatures(Arrays.asList(creatures));
-
-        EnvironmentVisualisation visualisation = new EnvironmentVisualisation(environment);
-        Window window = new Window(visualisation);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
     }
 }
