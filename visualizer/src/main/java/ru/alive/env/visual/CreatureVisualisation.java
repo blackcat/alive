@@ -19,7 +19,7 @@ public class CreatureVisualisation {
     public void paintMyself(Graphics2D g2d, Dimension d) {
         g2d.setColor(Color.white);
         g2d.setStroke(stroke);
-        g2d.drawRect((int)d.getWidth() - size/2, (int)d.getHeight() - size, size, size);
+        g2d.drawRect((int) d.getWidth() - size / 2, (int) d.getHeight() - size / 2, size, size);
     }
 
     public void setSize(int size) {

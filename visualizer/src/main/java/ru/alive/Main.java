@@ -1,6 +1,7 @@
 package ru.alive;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import ru.alive.env.Creature;
 import ru.alive.env.Environment;
 import ru.alive.env.UniverseEngine;

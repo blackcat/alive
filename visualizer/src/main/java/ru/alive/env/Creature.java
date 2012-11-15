@@ -20,12 +20,12 @@ public class Creature extends AbstractThread {
     private Impact impactToEnv = new Impact();
 
     private UniverseEngine engine;
+    private Brain brain;
 
-    private Brain brain = new RandomBrain();
-
-    public Creature(UniverseEngine engine) {
+    public Creature(UniverseEngine engine, Brain brain) {
         super("Simple creature #" + ++counter);
         this.engine = engine;
+        this.brain = brain;
     }
 
     @Override

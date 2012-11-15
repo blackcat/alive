@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import ru.alive.brain.Brain;
 import ru.alive.util.AbstractThread;
 
 import java.awt.*;
@@ -24,13 +25,17 @@ public class Environment extends AbstractThread {
     private UniverseEngine engine;
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private Brain brain;
 
     private int usize = 300;
     private Dimension size = new Dimension(usize, usize);
+
     @Value("${environment.resistanceLimit}")
     private int resistanceLimit;
+
     private Map<Creature, Dimension> creatures = new HashMap<Creature, Dimension>();
-    private final Random random = new Random(usize - Creature.SIZE);
+    private final Random random = new Random(System.currentTimeMillis());
 
     protected Environment() {
         super("2D environment");
@@ -59,7 +64,7 @@ public class Environment extends AbstractThread {
                     entry.getValue().getWidth() + (entry.getValue().getWidth() + movx <= 0 || entry.getValue().getWidth() + movx > usize ? 0 : movx),
                     entry.getValue().getHeight() + (entry.getValue().getHeight() + movy <= 0 || entry.getValue().getHeight() + movy > usize ? 0 : movy)
             );
-            log.debug("New " + entry.getKey().toString() + " position is " + entry.getValue());
+            log.trace(entry.getKey().toString() + " new position is " + entry.getValue());
 
             // write impacts to creatures
             entry.getKey().getImpactOfEnv().worthModifier = getWorthModifier(entry.getValue());
@@ -118,10 +123,10 @@ public class Environment extends AbstractThread {
 
     public void addSomeRandomCreatures() {
         Creature[] creatures = new Creature[]{
-                new Creature(engine),
-                new Creature(engine),
-                new Creature(engine),
-                new Creature(engine)
+                new Creature(engine, brain),
+                new Creature(engine, brain),
+                new Creature(engine, brain),
+                new Creature(engine, brain)
         };
         this.addCreatures(Arrays.asList(creatures));
     }
