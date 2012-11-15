@@ -8,4 +8,10 @@ public class Impact {
     public volatile float worthModifier;
     public volatile int movementEffortX;
     public volatile int movementEffortY;
+
+    public void copyData(Impact toImpact) {
+        toImpact.worthModifier = this.worthModifier;
+        toImpact.movementEffortX = this.movementEffortX;
+        toImpact.movementEffortY = this.movementEffortY;
+    }
 }

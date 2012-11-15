@@ -3,6 +3,8 @@ package ru.alive.env;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.alive.util.AbstractThread;
 
@@ -20,10 +22,13 @@ public class Environment extends AbstractThread {
 
     @Autowired
     private UniverseEngine engine;
+    @Autowired
+    private ApplicationContext context;
 
     private int usize = 300;
     private Dimension size = new Dimension(usize, usize);
-    private int resistanceLimit = 5;
+    @Value("${environment.resistanceLimit}")
+    private int resistanceLimit;
     private Map<Creature, Dimension> creatures = new HashMap<Creature, Dimension>();
     private final Random random = new Random(usize - Creature.SIZE);
 
@@ -44,16 +49,23 @@ public class Environment extends AbstractThread {
         for (Map.Entry<Creature, Dimension> entry : creatures.entrySet()) {
             movx = entry.getKey().getImpactToEnv().movementEffortX;
             movy = entry.getKey().getImpactToEnv().movementEffortY;
+
+            movx = movx > resistanceLimit ? resistanceLimit : movx;
+            movx = movx < -resistanceLimit ? -resistanceLimit : movx;
+            movy = movy > resistanceLimit ? resistanceLimit : movy;
+            movy = movy < -resistanceLimit ? -resistanceLimit : movy;
             // read impacts from creatures
             entry.getValue().setSize(
-                    Math.abs(movx) > resistanceLimit && entry.getValue().getWidth() + movx >= 0 && entry.getValue().getWidth() + movx < usize ? resistanceLimit : movx,
-                    Math.abs(movy) > resistanceLimit && entry.getValue().getHeight() + movy >= 0 && entry.getValue().getHeight() + movy < usize ? resistanceLimit : movy
+                    entry.getValue().getWidth() + (entry.getValue().getWidth() + movx <= 0 || entry.getValue().getWidth() + movx > usize ? 0 : movx),
+                    entry.getValue().getHeight() + (entry.getValue().getHeight() + movy <= 0 || entry.getValue().getHeight() + movy > usize ? 0 : movy)
             );
+            log.debug("New " + entry.getKey().toString() + " position is " + entry.getValue());
 
             // write impacts to creatures
             entry.getKey().getImpactOfEnv().worthModifier = getWorthModifier(entry.getValue());
         }
-        log.debug("Environment iteration finished");
+        context.publishEvent(new EnvironmentEvent(this, EnvironmentEvent.TYPE.renew));
+        log.trace("Environment iteration finished");
     }
 
     public float getWorthModifier(Dimension d) {

@@ -23,7 +23,7 @@ public class Window extends JFrame {
 
         add(visualisation, BorderLayout.WEST);
         add(controlPanel, BorderLayout.EAST);
-        setSize(500, visualisation.getHeight());
+//        setSize(500, visualisation.getHeight() + 100);
         setResizable(false);
 
         setVisible(true);

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ru.alive.brain.mongo.Edge;
+import ru.alive.brain.Edge;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

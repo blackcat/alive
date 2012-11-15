@@ -1,5 +1,6 @@
 package ru.alive.env.visual;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.alive.env.Creature;
 import ru.alive.exception.VisualisaitonException;
@@ -15,8 +16,17 @@ import java.util.Map;
 public class CreatureVisualisationHolder {
     private Map<Class<Creature>, CreatureVisualisation> cache = new HashMap<Class<Creature>, CreatureVisualisation>();
 
+    @Value("${creatureVisualisation.size}")
+    private int size;
+
     public CreatureVisualisationHolder() {
         cache.put(Creature.class, new CreatureVisualisation());
+    }
+
+    public void init() {
+        for (Map.Entry<Class<Creature>, CreatureVisualisation> entry : cache.entrySet()) {
+            entry.getValue().setSize(size);
+        }
     }
 
     public CreatureVisualisation getCreatureVisualisation(Creature creature) {

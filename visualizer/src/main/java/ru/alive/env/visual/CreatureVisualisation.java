@@ -10,7 +10,8 @@ import java.awt.*;
  */
 public class CreatureVisualisation {
 
-    Stroke stroke = new BasicStroke(1);
+    private Stroke stroke = new BasicStroke(1);
+    private int size;
 
     public CreatureVisualisation() {
     }
@@ -18,6 +19,14 @@ public class CreatureVisualisation {
     public void paintMyself(Graphics2D g2d, Dimension d) {
         g2d.setColor(Color.white);
         g2d.setStroke(stroke);
-        g2d.drawRect((int)d.getWidth(), (int)d.getHeight(), 2, 2);
+        g2d.drawRect((int)d.getWidth() - size/2, (int)d.getHeight() - size, size, size);
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setStroke(Stroke stroke) {
+        this.stroke = stroke;
     }
 }

@@ -1,4 +1,4 @@
-package ru.alive.brain.mongo;
+package ru.alive.brain;
 
 /**
  * @author dart

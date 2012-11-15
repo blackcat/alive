@@ -3,6 +3,7 @@ package ru.alive.env;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.alive.util.AbstractThread;
 
@@ -14,7 +15,10 @@ import ru.alive.util.AbstractThread;
 public class UniverseEngine extends AbstractThread {
 
     private static final Logger log = LoggerFactory.getLogger(UniverseEngine.class);
-    public static final int TICK = 1000;
+    @Value("${universeEngine.tick}")
+    public int tick = 1000;
+
+    public static int TICK;
 
     @Autowired
     private Environment env;
@@ -23,10 +27,14 @@ public class UniverseEngine extends AbstractThread {
         super("Universe engine");
     }
 
+    public void init() {
+        TICK = tick;
+    }
+
     @Override
     public synchronized void iteration() throws InterruptedException{
         sleep(5*1000);
-        log.info("Universe iteration");
+        log.debug("Universe iteration");
         notifyAll();
     }
 
@@ -36,5 +44,9 @@ public class UniverseEngine extends AbstractThread {
             creature.start();
         }
         super.start();
+    }
+
+    public int getTick() {
+        return tick;
     }
 }

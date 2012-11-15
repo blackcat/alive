@@ -2,6 +2,8 @@ package ru.alive.env;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.alive.brain.Brain;
+import ru.alive.brain.RandomBrain;
 import ru.alive.util.AbstractThread;
 
 /**
@@ -19,6 +21,8 @@ public class Creature extends AbstractThread {
 
     private UniverseEngine engine;
 
+    private Brain brain = new RandomBrain();
+
     public Creature(UniverseEngine engine) {
         super("Simple creature #" + ++counter);
         this.engine = engine;
@@ -27,9 +31,9 @@ public class Creature extends AbstractThread {
     @Override
     public void iteration() throws InterruptedException {
         sleep(UniverseEngine.TICK);
-        log.debug("Creature acts");
+        log.trace("Creature acts");
 
-
+        brain.getImpactTo(impactOfEnv, impactToEnv);
     }
 
     public Impact getImpactOfEnv() {
@@ -38,5 +42,10 @@ public class Creature extends AbstractThread {
 
     public Impact getImpactToEnv() {
         return impactToEnv;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

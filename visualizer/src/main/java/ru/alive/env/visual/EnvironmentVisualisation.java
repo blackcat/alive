@@ -3,9 +3,11 @@ package ru.alive.env.visual;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 import ru.alive.env.Creature;
 import ru.alive.env.Environment;
+import ru.alive.env.EnvironmentEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ import static java.lang.Math.*;
  * @author pvyazankin
  * @since 08.11.12 9:52
  */
-public class EnvironmentVisualisation extends JPanel {
+public class EnvironmentVisualisation extends JPanel implements ApplicationListener<EnvironmentEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(EnvironmentVisualisation.class);
 
@@ -31,6 +33,7 @@ public class EnvironmentVisualisation extends JPanel {
 
     public EnvironmentVisualisation(Environment environment, CreatureVisualisationHolder holder) {
         env = environment;
+        setOpaque(true);
         setSize(env.getSize());
         setMinimumSize(env.getSize());
         setMaximumSize(env.getSize());
@@ -67,5 +70,10 @@ public class EnvironmentVisualisation extends JPanel {
         }
     }
 
-//    public vo
+    @Override
+    public void onApplicationEvent(EnvironmentEvent event) {
+        repaint();
+    }
+
+    //    public vo
 }
