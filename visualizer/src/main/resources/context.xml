@@ -10,51 +10,56 @@
     default-init-method="init">
 
 
-    <context:component-scan base-package="ru.alive"/>
+    <!--<context:component-scan base-package="ru.alive"/>-->
     <!--<context:property-placeholder />-->
     <context:annotation-config />
 
 
-    <bean id="propertyConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:*.properties</value>
-            </list>
-        </property>
-    </bean>
+        <!--<bean id="propertyConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">-->
+        <!--<property name="locations">-->
+            <!--<list>-->
+                <!--<value>classpath:*.properties</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
 
 
-    <bean id="controlPanel" class="ru.alive.env.visual.ControlPanel">
-        <constructor-arg ref="environment"/>
-        <constructor-arg ref="environmentVisualisation"/>
-    </bean>
+    <!--<bean id="controlPanel" class="ru.alive.env.visual.ControlPanel">-->
+        <!--<constructor-arg ref="environment"/>-->
+        <!--<constructor-arg ref="environmentVisualisation"/>-->
+        <!--<constructor-arg>-->
+            <!--<bean class="java.io.File">-->
+                <!--<constructor-arg type="java.lang.String" value="${util.brainDumpPath}"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
 
-    <bean id="window" class="ru.alive.env.visual.Window">
-        <constructor-arg ref="environmentVisualisation"/>
-        <constructor-arg ref="controlPanel"/>
-    </bean>
+    <!--<bean id="window" class="ru.alive.env.visual.Window">-->
+        <!--<constructor-arg ref="environmentVisualisation"/>-->
+        <!--<constructor-arg ref="controlPanel"/>-->
+    <!--</bean>-->
 
-    <bean id="environmentVisualisation" class="ru.alive.env.visual.EnvironmentVisualisation">
-        <constructor-arg ref="environment"/>
-        <constructor-arg ref="creatureVisualisationHolder"/>
-    </bean>
+    <!--<bean id="environmentVisualisation" class="ru.alive.env.visual.EnvironmentVisualisation">-->
+        <!--<constructor-arg ref="environment"/>-->
+        <!--<constructor-arg ref="creatureVisualisationHolder"/>-->
+    <!--</bean>-->
 
 
 
     <!-- Mongo -->
 
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-    	<constructor-arg name="mongo" ref="mongo"/>
-    	<constructor-arg name="databaseName" value="memory"/>
-    	<!--<constructor-arg name="defaultCollectionName" value="HelloMongo"/>-->
-    </bean>
+    <!--<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+    	<!--<constructor-arg name="mongo" ref="mongo"/>-->
+    	<!--<constructor-arg name="databaseName" value="memory"/>-->
+    	<!--&lt;!&ndash;<constructor-arg name="defaultCollectionName" value="HelloMongo"/>&ndash;&gt;-->
+    <!--</bean>-->
 
-    <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
-    	<property name="host" value="127.0.0.1"/>
-        <property name="port" value="27017"/>
-    </bean>
+    <!--<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">-->
+    	<!--<property name="host" value="127.0.0.1"/>-->
+        <!--<property name="port" value="27017"/>-->
+    <!--</bean>-->
 
-	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+	<!--<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>-->
 
 </beans>

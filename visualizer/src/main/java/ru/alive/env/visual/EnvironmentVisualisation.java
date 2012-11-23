@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Service;
 import ru.alive.env.Creature;
 import ru.alive.env.Environment;
 import ru.alive.env.EnvironmentEvent;
@@ -65,7 +64,7 @@ public class EnvironmentVisualisation extends JPanel implements ApplicationListe
     }
 
     protected void paintCreatures(Graphics2D g2d) {
-        for (Creature c : env.getCreatures()) {
+        for (Creature c : env.getCreaturesMap()) {
             creatureVisualisationHolder.getCreatureVisualisation(c).paintMyself(g2d, env.getCreaturePosition(c));
         }
     }

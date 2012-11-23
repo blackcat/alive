@@ -1,5 +1,12 @@
 package ru.alive;
 
+import org.apache.commons.configuration.CompositeConfiguration;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import ru.alive.env.Creature;
@@ -16,18 +23,25 @@ import java.util.Arrays;
  */
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
-//        UniverseEngine universeEngine = UniverseEngine.getInstance();
-//
-//        Environment environment = Environment.getInstance();
-//        environment.addSomeRandomCreatures();
-//
-//
-//        EnvironmentVisualisation visualisation = new EnvironmentVisualisation(environment);
-//        Window window = new Window(visualisation);
+    public static void main(String[] args) throws InterruptedException, ConfigurationException {
+//        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        // config
+        CompositeConfiguration config = new CompositeConfiguration();
+        config.addConfiguration(new PropertiesConfiguration("app.properties"));
 
+        // context
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.scan("ru.alive");
+
+        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(Creature.class);
+        for (int i = 0; i < config.getInt("creatures.quantity"); i++) {
+            BeanDefinition creatureBeanDefinition = beanDefinitionBuilder.getBeanDefinition();
+            context.registerBeanDefinition("creature" + i, creatureBeanDefinition);
+        }
+        context.refresh();
+
+        // universe start
         UniverseEngine universeEngine = context.getBean(UniverseEngine.class);
         universeEngine.start();
     }

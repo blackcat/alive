@@ -1,37 +1,59 @@
 package ru.alive.brain;
 
+import ru.alive.env.Creature;
+import ru.alive.env.Impact;
+
 /**
  * @author dart
  * @since 11/14/12 5:55 PM
  */
 public class Edge {
 
-    private int impactOf0;
-    private int impactOf1;
-    private int impactTo;
+    private Creature creature;
+    private Impact impactOf0;
+    private Impact impactOf1;
+    private Impact impactTo;
 
-    public int getImpactOf0() {
+    public Edge() {
+    }
+
+    public Edge(Creature creature, Impact impactOf0, Impact impactOf1, Impact impactTo) {
+        this.creature = creature;
+        this.impactOf0 = impactOf0;
+        this.impactOf1 = impactOf1;
+        this.impactTo = impactTo;
+    }
+
+    public Impact getImpactOf0() {
         return impactOf0;
     }
 
-    public void setImpactOf0(int impactOf0) {
+    public void setImpactOf0(Impact impactOf0) {
         this.impactOf0 = impactOf0;
     }
 
-    public int getImpactOf1() {
+    public Impact getImpactOf1() {
         return impactOf1;
     }
 
-    public void setImpactOf1(int impactOf1) {
+    public void setImpactOf1(Impact impactOf1) {
         this.impactOf1 = impactOf1;
     }
 
-    public int getImpactTo() {
+    public Impact getImpactTo() {
         return impactTo;
     }
 
-    public void setImpactTo(int impactTo) {
+    public void setImpactTo(Impact impactTo) {
         this.impactTo = impactTo;
+    }
+
+    public Creature getCreature() {
+        return creature;
+    }
+
+    public void setCreature(Creature creature) {
+        this.creature = creature;
     }
 
     @Override
@@ -41,18 +63,25 @@ public class Edge {
 
         Edge edge = (Edge) o;
 
-        if (impactOf0 != edge.impactOf0) return false;
-        if (impactOf1 != edge.impactOf1) return false;
-        if (impactTo != edge.impactTo) return false;
+        if (creature != null ? !creature.equals(edge.creature) : edge.creature != null) return false;
+        if (impactOf0 != null ? !impactOf0.equals(edge.impactOf0) : edge.impactOf0 != null) return false;
+        if (impactOf1 != null ? !impactOf1.equals(edge.impactOf1) : edge.impactOf1 != null) return false;
+        if (impactTo != null ? !impactTo.equals(edge.impactTo) : edge.impactTo != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = impactOf0;
-        result = 31 * result + impactOf1;
-        result = 31 * result + impactTo;
+        int result = creature != null ? creature.hashCode() : 0;
+        result = 31 * result + (impactOf0 != null ? impactOf0.hashCode() : 0);
+        result = 31 * result + (impactOf1 != null ? impactOf1.hashCode() : 0);
+        result = 31 * result + (impactTo != null ? impactTo.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return creature + " Edge{" + impactOf0 + " --> " + impactTo + " --> " + impactOf1 + '}';
     }
 }

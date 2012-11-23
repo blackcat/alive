@@ -31,5 +31,55 @@
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <version>1.27</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
     </dependencies>
+
+
+    <profiles>
+
+        <!--
+         | Developer profile
+         +-->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode</groupId>
+                        <artifactId>maven-mongodb-plugin</artifactId>
+                        <version>0.2</version>
+                        <configuration>
+                            <dbConnectionSettings>
+                                <hostname>localhost</hostname>
+                                <database>someDatabase</database>
+                            </dbConnectionSettings>
+                            <dbUpdateScriptsDirectory>
+                                <param>src/main/resources/mongo/update</param>
+                            </dbUpdateScriptsDirectory>
+                            <dbCreateScriptsDirectory>
+                                <param>src/main/resources/mongo/create</param>
+                            </dbCreateScriptsDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

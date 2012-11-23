@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.alive.util.AbstractThread;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @author pvyazankin
  * @since 08.11.12 10:03
@@ -27,6 +29,7 @@ public class UniverseEngine extends AbstractThread {
         super("Universe engine");
     }
 
+    @PostConstruct
     public void init() {
         TICK = tick;
     }
@@ -40,7 +43,7 @@ public class UniverseEngine extends AbstractThread {
 
     public void start() {
         env.start();
-        for (Creature creature : env.getCreatures()) {
+        for (Creature creature : env.getCreaturesMap()) {
             creature.start();
         }
         super.start();

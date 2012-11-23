@@ -3,12 +3,14 @@ package ru.alive.env;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import ru.alive.brain.Brain;
 import ru.alive.util.AbstractThread;
 
+import javax.annotation.PostConstruct;
 import java.awt.*;
 import java.util.*;
 
@@ -25,8 +27,8 @@ public class Environment extends AbstractThread {
     private UniverseEngine engine;
     @Autowired
     private ApplicationContext context;
-    @Autowired
-    private Brain brain;
+    @Autowired(required = false)
+    private Collection<Creature> creatures;
 
     private int usize = 300;
     private Dimension size = new Dimension(usize, usize);
@@ -34,15 +36,16 @@ public class Environment extends AbstractThread {
     @Value("${environment.resistanceLimit}")
     private int resistanceLimit;
 
-    private Map<Creature, Dimension> creatures = new HashMap<Creature, Dimension>();
+    private Map<Creature, Dimension> creaturesMap = new HashMap<Creature, Dimension>();
     private final Random random = new Random(System.currentTimeMillis());
 
     protected Environment() {
         super("2D environment");
     }
 
+    @PostConstruct
     public void init() {
-        addSomeRandomCreatures();
+        addCreatures(creatures);
     }
 
     @Override
@@ -51,7 +54,7 @@ public class Environment extends AbstractThread {
         log.trace("Environment iteration");
 
         int movx, movy;
-        for (Map.Entry<Creature, Dimension> entry : creatures.entrySet()) {
+        for (Map.Entry<Creature, Dimension> entry : creaturesMap.entrySet()) {
             movx = entry.getKey().getImpactToEnv().movementEffortX;
             movy = entry.getKey().getImpactToEnv().movementEffortY;
 
@@ -59,14 +62,14 @@ public class Environment extends AbstractThread {
             movx = movx < -resistanceLimit ? -resistanceLimit : movx;
             movy = movy > resistanceLimit ? resistanceLimit : movy;
             movy = movy < -resistanceLimit ? -resistanceLimit : movy;
-            // read impacts from creatures
+            // read impacts from creaturesMap
             entry.getValue().setSize(
                     entry.getValue().getWidth() + (entry.getValue().getWidth() + movx <= 0 || entry.getValue().getWidth() + movx > usize ? 0 : movx),
                     entry.getValue().getHeight() + (entry.getValue().getHeight() + movy <= 0 || entry.getValue().getHeight() + movy > usize ? 0 : movy)
             );
             log.trace(entry.getKey().toString() + " new position is " + entry.getValue());
 
-            // write impacts to creatures
+            // write impacts to creaturesMap
             entry.getKey().getImpactOfEnv().worthModifier = getWorthModifier(entry.getValue());
         }
         context.publishEvent(new EnvironmentEvent(this, EnvironmentEvent.TYPE.renew));
@@ -86,16 +89,19 @@ public class Environment extends AbstractThread {
         return size;
     }
 
-    public void addCreature(Creature creature) {
+    private void addCreature(Creature creature) {
         Dimension d = new Dimension(
                 random.nextInt(size.width),
                 random.nextInt(size.height)
         );
-        creatures.put(creature, d);
+        creaturesMap.put(creature, d);
         creature.getImpactOfEnv().worthModifier = getWorthModifier(d);
     }
 
-    public boolean addCreatures(Collection<Creature> creatures) {
+    private boolean addCreatures(Collection<Creature> creatures) {
+        if (creatures == null) {
+            return false;
+        }
         for (Creature creature : creatures) {
             this.addCreature(creature);
         }
@@ -104,34 +110,34 @@ public class Environment extends AbstractThread {
 
     public boolean removeCreature(Creature creature) {
         creature.stop(true);
-        return creatures.remove(creature) != null;
+        return creaturesMap.remove(creature) != null;
     }
 
     public void clearCreatures() {
-        for (Creature creature : creatures.keySet()) {
+        for (Creature creature : creaturesMap.keySet()) {
             creature.stop(true);
         }
-        creatures.clear();
+        creaturesMap.clear();
     }
 
     /**
-     * Returns a copy of creatures collection. Changes will not be reflected.
+     * Returns a copy of creaturesMap collection. Changes will not be reflected.
      */
-    public Set<Creature> getCreatures() {
-        return new HashSet<Creature>(creatures.keySet());
+    public Set<Creature> getCreaturesMap() {
+        return new HashSet<Creature>(creaturesMap.keySet());
     }
-
-    public void addSomeRandomCreatures() {
-        Creature[] creatures = new Creature[]{
-                new Creature(engine, brain),
-                new Creature(engine, brain),
-                new Creature(engine, brain),
-                new Creature(engine, brain)
-        };
-        this.addCreatures(Arrays.asList(creatures));
-    }
+//
+//    public void addSomeRandomCreatures() {
+//        Creature[] creaturesMap = new Creature[]{
+//                new Creature(engine, brain),
+//                new Creature(engine, brain),
+//                new Creature(engine, brain),
+//                new Creature(engine, brain)
+//        };
+//        this.addCreatures(Arrays.asList(creaturesMap));
+//    }
 
     public Dimension getCreaturePosition(Creature c) {
-        return creatures.get(c);
+        return creaturesMap.get(c);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.alive.env.Creature;
 import ru.alive.exception.VisualisaitonException;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class CreatureVisualisationHolder {
         cache.put(Creature.class, new CreatureVisualisation());
     }
 
+    @PostConstruct
     public void init() {
         for (Map.Entry<Class<Creature>, CreatureVisualisation> entry : cache.entrySet()) {
             entry.getValue().setSize(size);
@@ -30,7 +32,7 @@ public class CreatureVisualisationHolder {
     }
 
     public CreatureVisualisation getCreatureVisualisation(Creature creature) {
-        if (!cache.containsKey(creature.getClass())) {
+        if (!cache.containsKey(creature.)) {
             throw new VisualisaitonException("Creature visualiser wasn't found");
         }
         return cache.get(creature.getClass());
